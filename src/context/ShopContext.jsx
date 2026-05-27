@@ -77,7 +77,7 @@ export const ShopProvider = ({ children }) => {
     useEffect(() => {
         const fixImgUrl = (url) => {
             if (!url) return url;
-            if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/')) {
+            if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/') || url.startsWith('data:')) {
                 return url;
             }
             return `/${url}`;
