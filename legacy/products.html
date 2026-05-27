@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop All Magic | Antigrav Kids</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;800;900&family=Amatic+SC:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .filter-btn-active {
+            box-shadow: 4px 4px 0 var(--clr-orange);
+            background: var(--clr-blue);
+            color: white;
+            font-weight: 700;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid var(--clr-blue);
+            color: var(--clr-blue);
+        }
+
+        .filter-btn:hover {
+            background: var(--clr-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0 var(--clr-orange);
+        }
+
+        .real-photo-card {
+            background: #fff;
+            padding: 1.5rem;
+            box-shadow: 8px 8px 0 var(--clr-blue);
+            border: 3px solid var(--clr-orange);
+            border-radius: 20px;
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .real-photo-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 12px 12px 0 var(--clr-blue);
+        }
+
+        .real-photo-wrapper {
+            width: 100%;
+            height: 320px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            border: 2px solid #eee;
+            background: #fafafa;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .real-photo-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .real-photo-wrapper .placeholder-text {
+            position: absolute;
+            font-family: var(--font-hand);
+            color: var(--clr-blue);
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .action-btns button {
+            flex: 1;
+            border-radius: 30px;
+            font-family: var(--font-heading);
+            font-weight: 800;
+            padding: 0.8rem 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .add-to-cart-btn {
+            border: 2px solid var(--clr-blue);
+            color: var(--clr-blue);
+            background: #fff;
+        }
+
+        .add-to-cart-btn:hover {
+            background: var(--clr-sky);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="paper-texture"></div>
+
+    <div class="bg-elements" aria-hidden="true">
+        <div class="shape shape-blob-1" style="background:var(--clr-mint); opacity:0.1;"></div>
+        <div class="shape shape-blob-2" style="background:var(--clr-yellow); opacity:0.1;"></div>
+        <div class="doodle-bg"
+            style="background-image: url('assets/illust_doodles.png'); opacity: 0.05; mix-blend-mode: multiply;"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="glass-header" style="position: sticky; top: 20px;">
+        <div class="logo">
+            <a href="index.html" class="logo-text">Antigrav Kids</a>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html#collections">Lookbook</a>
+            <a href="products.html" style="color:var(--clr-orange);">Shop</a>
+            <a href="index.html#about">Story</a>
+        </nav>
+        <div class="nav-actions">
+            <!-- Added cart-counter class for JS -->
+            <button class="btn btn-pill btn-black cart-counter" style="transition: transform 0.2s ease; cursor:pointer;"
+                onclick="window.location.href='cart.html'">Cart (0)</button>
+        </div>
+    </header>
+
+    <!-- PLP Header -->
+    <section class="plp-header" style="padding-top: 4rem; padding-bottom: 2rem; text-align:center;">
+        <h1 class="hero-title styled-type text-stroke" style="font-size:4.5rem; margin-bottom:1rem;">Shop The <span
+                class="marker-highlight" style="-webkit-text-stroke:0;">Magic</span></h1>
+        <p class="handwritten-style" style="font-size:1.8rem; color:var(--clr-blue); max-width:600px; margin:0 auto;">
+            Everything your little dreamers need for their biggest adventures.</p>
+
+        <div class="category-filters"
+            style="margin-top: 3rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+            <button class="btn btn-pill filter-btn-active">All Magic</button>
+            <button class="btn btn-pill filter-btn">T-Shirts</button>
+            <button class="btn btn-pill filter-btn">Shirts</button>
+            <button class="btn btn-pill filter-btn">Pants</button>
+            <button class="btn btn-pill filter-btn">Jeans</button>
+            <button class="btn btn-pill filter-btn">Shorts</button>
+            <button class="btn btn-pill filter-btn">Cord-Sets</button>
+        </div>
+    </section>
+
+    <!-- Products Grid Full (Dynamically Loaded via LocalStorage) -->
+    <section class="products-grid-full" style="padding-top:2rem;">
+        <div class="products-grid">
+            <!-- Items injected by script.js -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="torn-paper-footer">
+        <div class="paper-tear-top"></div>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3 class="logo-text" style="color:#fff;">Antigrav Kids</h3>
+                <p class="handwritten-tag" style="color:#fff; font-size:1.8rem; transform:none;">A blend of reality &
+                    imagination.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Shop</h4>
+                <ul>
+                    <li><a href="#">New Drops</a></li>
+                    <li><a href="#">Collections</a></li>
+                    <li><a href="#">Sale items</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Join the story</h4>
+                <div class="social-icons">
+                    <a href="#" class="social-btn sketch-btn">Ig</a>
+                    <a href="#" class="social-btn sketch-btn">Fb</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Antigrav Kids. Designed with illustrations.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

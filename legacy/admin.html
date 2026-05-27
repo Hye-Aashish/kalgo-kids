@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Antigrav Kids</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;800;900&family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body { background: #f4f7f6; overflow-x: hidden; }
+        .admin-layout { display: flex; min-height: 100vh; font-family: var(--font-heading); }
+        
+        .admin-sidebar { 
+            width: 280px; background: var(--clr-blue); color: #fff; padding: 2rem;
+            display: flex; flex-direction: column; border-right: 4px solid var(--clr-orange);
+        }
+        .admin-sidebar a { 
+            color: rgba(255,255,255,0.7); text-decoration: none; font-size: 1.2rem; font-weight: 700;
+            padding: 1rem; border-radius: 8px; transition: 0.2s; margin-bottom: 0.5rem;
+        }
+        .admin-sidebar a.active, .admin-sidebar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        
+        .admin-main { flex: 1; padding: 3rem; overflow-y: auto; position: relative; }
+        
+        /* Metric Cards */
+        .metric-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        .metric-card { 
+            background: #fff; padding: 2rem; border-radius: 12px;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.05); border-left: 5px solid var(--clr-orange);
+        }
+        
+        /* Tables */
+        .admin-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 4px 4px 0 rgba(0,0,0,0.05); }
+        .admin-table th, .admin-table td { padding: 1.2rem; text-align: left; border-bottom: 1px solid #eee; }
+        .admin-table th { background: var(--clr-sky); color: var(--clr-blue); font-weight: 800; }
+        .admin-table tr:hover { background: #fafafa; }
+        .admin-table img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; }
+        
+        /* Forms */
+        .add-form { background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 4px 4px 0 rgba(0,0,0,0.05); max-width: 600px; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-weight: 700; color: var(--clr-blue); margin-bottom: 0.5rem; }
+        .form-group input, .form-group select { width: 100%; padding: 0.8rem; border: 2px solid #ddd; border-radius: 6px; font-family: inherit; font-size: 1rem; }
+        .form-group input:focus { border-color: var(--clr-orange); outline: none; }
+        
+        .del-btn-admin { background: #ff4b4b; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 700; transition: 0.2s;}
+        .del-btn-admin:hover { background: #e03232; transform: translateY(-2px); }
+
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .admin-layout { flex-direction: column; }
+            .admin-sidebar { width: 100%; border-right: none; border-bottom: 4px solid var(--clr-orange); }
+            .metric-cards { grid-template-columns: 1fr; }
+            .admin-table { display: block; overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-layout">
+        <!-- Sidebar Navigation -->
+        <div class="admin-sidebar">
+            <h2 class="styled-type" style="font-size: 2.2rem; margin-bottom: 3rem; color: #fff;">System <span style="color:var(--clr-yellow)">Panel</span></h2>
+            <nav id="admin-nav" style="display: flex; flex-direction: column;">
+                <a href="#dashboard" class="nav-btn active" data-target="dashboard">📊 Dashboard Overview</a>
+                <a href="#products" class="nav-btn" data-target="products">🛍️ Manage Products</a>
+                <a href="#orders" class="nav-btn" data-target="orders">📦 Customer Orders</a>
+                <div style="flex:1;"></div>
+                <a href="index.html" style="margin-top: 2rem; color:var(--clr-mint); text-align:center;">Return to Storefront</a>
+            </nav>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="admin-main">
+            
+            <!-- ====== DASHBOARD TAB ====== -->
+            <div id="dashboard" class="tab-content active">
+                <h1 style="color:var(--clr-blue); font-size: 3rem; margin-bottom: 2rem;" class="styled-type">Metrics <span style="color:var(--clr-orange)">Dashboard</span></h1>
+                
+                <div class="metric-cards">
+                    <div class="metric-card">
+                        <h3 style="color:var(--clr-text-light);">Total Revenue</h3>
+                        <h2 id="metric-revenue" style="color:var(--clr-orange); font-size:3rem; font-weight:900;">$0.00</h2>
+                    </div>
+                    <div class="metric-card border-left-blue" style="border-left-color: var(--clr-blue);">
+                        <h3 style="color:var(--clr-text-light);">Total Orders</h3>
+                        <h2 id="metric-orders" style="color:var(--clr-blue); font-size:3rem; font-weight:900;">0</h2>
+                    </div>
+                    <div class="metric-card border-left-mint" style="border-left-color: var(--clr-mint);">
+                        <h3 style="color:var(--clr-text-light);">Active Products</h3>
+                        <h2 id="metric-products" style="color:var(--clr-mint); font-size:3rem; font-weight:900;">0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====== PRODUCTS TAB ====== -->
+            <div id="products" class="tab-content">
+                <h1 style="color:var(--clr-blue); font-size: 3rem; margin-bottom: 2rem;" class="styled-type">Catalog <span style="color:var(--clr-orange)">Manager</span></h1>
+                
+                <div style="display:flex; justify-content:space-between; margin-bottom: 2rem; align-items:flex-end;">
+                    <h2 style="color:var(--clr-blue);">Active Store Inventory</h2>
+                    <button class="btn btn-pill btn-primary" onclick="document.getElementById('add-product-form').style.display='block'">+ Add New Product</button>
+                </div>
+
+                <!-- Add Product Form (Hidden by default) -->
+                <div id="add-product-form" class="add-form" style="display:none; position:relative;">
+                    <button onclick="this.parentElement.style.display='none'" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+                    <h3 style="color:var(--clr-blue); margin-bottom:1.5rem;">Create New Item</h3>
+                    
+                    <form id="newProductForm">
+                        <div class="form-group">
+                            <label>Product Title</label>
+                            <input type="text" id="p_title" required placeholder="e.g. Magic Wanderer Jacket">
+                        </div>
+                        <div class="form-group">
+                            <label>Price ($)</label>
+                            <input type="number" id="p_price" required step="0.01" placeholder="e.g. 45.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Image URL (or Local Path)</label>
+                            <input type="text" id="p_image" required placeholder="e.g. assets/winter.png">
+                        </div>
+                        <div class="form-group">
+                            <label>Image Render Style</label>
+                            <select id="p_style">
+                                <option value="false">Real Photo (Polaroid Frame)</option>
+                                <option value="true">Digital Illustration (Transparent Blend)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%; border-radius:6px;">Push to Live Store</button>
+                    </form>
+                </div>
+
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Title</th>
+                            <th>Price</th>
+                            <th>Style</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="catalog-table-body">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ====== ORDERS TAB ====== -->
+            <div id="orders" class="tab-content">
+                <h1 style="color:var(--clr-blue); font-size: 3rem; margin-bottom: 2rem;" class="styled-type">Customer <span style="color:var(--clr-orange)">Orders</span></h1>
+                
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Items Count</th>
+                            <th>Total Revenue</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- TAB SWITCHING LOGIC ---
+            const navBtns = document.querySelectorAll('.nav-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = btn.getAttribute('data-target');
+                    
+                    navBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    contents.forEach(c => c.classList.remove('active'));
+                    document.getElementById(target).classList.add('active');
+                });
+            });
+
+            // --- DATA LOGIC ---
+            const catalogTable = document.getElementById('catalog-table-body');
+            const ordersTable = document.getElementById('orders-table-body');
+            
+            function refreshAdminData() {
+                // Ensure defaults exist from global script.js logic context
+                const catalog = JSON.parse(localStorage.getItem('antigrav_catalog')) || [];
+                const orders = JSON.parse(localStorage.getItem('antigrav_orders')) || [];
+                
+                // 1. Update Metrics
+                const totalRev = orders.reduce((sum, ord) => sum + ord.total, 0);
+                document.getElementById('metric-revenue').innerText = `$${totalRev.toFixed(2)}`;
+                document.getElementById('metric-orders').innerText = orders.length;
+                document.getElementById('metric-products').innerText = catalog.length;
+                
+                // 2. Render Products Table
+                catalogTable.innerHTML = '';
+                catalog.forEach((item, index) => {
+                    const styleText = item.isMultiply ? '<span style="color:var(--clr-blue); font-weight:700;">Digital Blend</span>' : '<span style="color:var(--clr-orange); font-weight:700;">Real Photo</span>';
+                    
+                    catalogTable.innerHTML += `
+                        <tr>
+                            <td><img src="${item.image}" alt=""></td>
+                            <td style="font-weight:700; color:var(--clr-blue);">${item.title}</td>
+                            <td>$${parseFloat(item.price).toFixed(2)}</td>
+                            <td>${styleText}</td>
+                            <td><button class="del-btn-admin" onclick="deleteProduct(${index})">Remove</button></td>
+                        </tr>
+                    `;
+                });
+
+                // 3. Render Orders Table
+                ordersTable.innerHTML = '';
+                if(orders.length === 0) {
+                    ordersTable.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem; color:#888;">No orders processed yet. Go simulate a checkout on the cart page!</td></tr>`;
+                } else {
+                    // Reverse to show newest first
+                    [...orders].reverse().forEach(ord => {
+                        ordersTable.innerHTML += `
+                            <tr>
+                                <td style="font-weight:700;">#${ord.id}</td>
+                                <td>${ord.date}</td>
+                                <td>${ord.items} items</td>
+                                <td style="color:var(--clr-orange); font-weight:800;">$${parseFloat(ord.total).toFixed(2)}</td>
+                                <td style="color:var(--clr-mint); font-weight:800;">✓ Paid</td>
+                            </tr>
+                        `;
+                    });
+                }
+            }
+
+            refreshAdminData();
+
+            // Make delete global for inline onClick
+            window.deleteProduct = function(index) {
+                if(confirm('Are you sure you want to remove this product from the live storefront?')) {
+                    let catalog = JSON.parse(localStorage.getItem('antigrav_catalog')) || [];
+                    catalog.splice(index, 1);
+                    localStorage.setItem('antigrav_catalog', JSON.stringify(catalog));
+                    refreshAdminData();
+                }
+            };
+
+            // Add Product Form Submit
+            document.getElementById('newProductForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                let catalog = JSON.parse(localStorage.getItem('antigrav_catalog')) || [];
+                
+                const newProd = {
+                    id: Date.now(),
+                    title: document.getElementById('p_title').value,
+                    price: parseFloat(document.getElementById('p_price').value),
+                    image: document.getElementById('p_image').value,
+                    isMultiply: document.getElementById('p_style').value === 'true',
+                    category: 'Added via Admin'
+                };
+                
+                catalog.push(newProd);
+                localStorage.setItem('antigrav_catalog', JSON.stringify(catalog));
+                
+                e.target.reset();
+                document.getElementById('add-product-form').style.display = 'none';
+                refreshAdminData();
+                alert(`Success! "${newProd.title}" is now permanently live on the Shop page.`);
+            });
+
+        });
+    </script>
+</body>
+</html>

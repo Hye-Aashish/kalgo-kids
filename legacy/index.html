@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antigrav Kids | Mixed Media</title>
+
+    <!-- Google Fonts for Collage aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;800;900&family=Amatic+SC:wght@700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Paper Texture Overlay -->
+    <div class="paper-texture"></div>
+
+    <!-- Background Sprinkles -->
+    <div class="bg-elements" aria-hidden="true">
+        <div class="shape shape-blob-1"></div>
+        <div class="shape shape-blob-2"></div>
+        <div class="shape shape-blob-3"></div>
+        <div class="doodle-bg"
+            style="background-image: url('assets/illust_doodles.png'); opacity: 0.07; mix-blend-mode: multiply;"></div>
+    </div>
+
+    <!-- Header / Navigation -->
+    <header class="glass-header">
+        <div class="logo">
+            <span class="logo-text">Kalgo Kids</span>
+        </div>
+        <nav class="nav-links">
+            <a href="#collections">Lookbook</a>
+            <a href="products.html">Shop</a>
+            <a href="#about">Story</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="btn btn-pill btn-black cart-counter" style="transition: transform 0.2s ease; cursor:pointer;"
+                onclick="window.location.href='cart.html'">Cart (0)</button>
+        </div>
+    </header>
+
+    <!-- Hero Section: Mixed Media Container -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <p class="handwritten-tag floating-slow">Imagine. Play. Wear.</p>
+            <h1 class="hero-title styled-type">
+                <span class="text-stroke">Real</span> Fun,<br>
+                <span class="marker-highlight">Illustrated</span> Magic
+            </h1>
+            <p class="hero-subtitle">Where premium kids fashion collides with a whimsical storybook aesthetic. Perfect
+                for active dreamers.</p>
+            <div class="hero-actions">
+                <a href="products.html" class="btn btn-pill btn-primary btn-large floating-fast scribble-shadow">Shop
+                    Collection</a>
+            </div>
+
+            <!-- Floating doodle cutouts near text -->
+            <div class="scribble scribble-star scribble-pos-1 floating-slow"></div>
+        </div>
+
+        <!-- The Collage Group -->
+        <div class="hero-mixed-media">
+
+            <!-- Real photo popped in front -->
+            <img src="assets/hero_kids.png" alt="Real kids jumping" class="hero-real-cutout">
+
+            <!-- Scattered doodles in front of kids -->
+            <div class="scribble scribble-cloud floating-fast scribble-pos-2"></div>
+        </div>
+    </section>
+
+    <!-- Featured Collections (Polaroid Style) -->
+    <section id="collections" class="featured-collections">
+        <h2 class="section-title text-center styled-type">A <span class="marker-highlight text-mint">Storybook</span>
+            Season</h2>
+
+        <div class="collections-grid">
+
+            <!-- Card 1: Winter -->
+            <div class="polaroid-card tilted-left floating-slow">
+                <div class="masking-tape tape-1"></div>
+                <!-- Real Photo -->
+                <div class="card-img-wrapper">
+                    <img src="assets/winter.png" alt="Winter photography" class="photo-real">
+                    <!-- Illustrated peek-a-boo overlay on hover -->
+                    <img src="assets/illust_winter.png" alt="Illustration overlay" class="photo-illust-overlay">
+                </div>
+                <div class="card-content handwritten-style">
+                    <h3 class="polaroid-caption">Snow Days ❄️</h3>
+                </div>
+                <div class="scribble scribble-burst floating-fast"></div>
+            </div>
+
+            <!-- Card 2: Summer -->
+            <div class="polaroid-card titled-card floating-med">
+                <div class="masking-tape tape-2"></div>
+                <div class="card-img-wrapper">
+                    <img src="assets/summer.png" alt="Summer photography" class="photo-real">
+                    <img src="assets/illust_summer.png" alt="Illustration overlay" class="photo-illust-overlay">
+                </div>
+                <div class="card-content handwritten-style">
+                    <h3 class="polaroid-caption">Summer Vibes ☀️</h3>
+                </div>
+            </div>
+
+            <!-- Card 3: Party -->
+            <div class="polaroid-card tilted-right floating-fast">
+                <div class="masking-tape tape-3"></div>
+                <div class="card-img-wrapper">
+                    <img src="assets/party.png" alt="Party photography" class="photo-real">
+                    <img src="assets/illust_party.png" alt="Illustration overlay" class="photo-illust-overlay">
+                </div>
+                <div class="card-content handwritten-style">
+                    <h3 class="polaroid-caption">Party Time 🎉</h3>
+                </div>
+                <div class="scribble scribble-star scribble-pos-bottom floating-slow"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Best Sellers -->
+    <section id="best-sellers" class="best-sellers">
+        <h2 class="section-title styled-type">Our <span class="marker-highlight text-yellow">Creative</span> Corner</h2>
+
+        <div class="products-grid">
+            <div class="product-card glass-card collage-border">
+                <div class="prod-img-box">
+                    <div class="watercolor-blob blob-mint"></div>
+                    <img src="assets/product_1.png" alt="Geometric Sweater" class="floating-product">
+                    <span class="tag tag-sketch">New</span>
+                </div>
+                <div class="prod-info">
+                    <h4>Geo Fun Sweater</h4>
+                    <p class="price">$42.00</p>
+                </div>
+            </div>
+
+            <div class="product-card glass-card collage-border tilted-right">
+                <div class="prod-img-box">
+                    <div class="watercolor-blob blob-orange"></div>
+                    <img src="assets/product_2.png" alt="Bright Sneakers" class="floating-product"
+                        style="animation-delay: 1s;">
+                </div>
+                <div class="prod-info">
+                    <h4>Rainbow Stompers</h4>
+                    <p class="price">$55.00</p>
+                </div>
+            </div>
+
+            <div class="product-card glass-card collage-border tilted-left">
+                <div class="prod-img-box">
+                    <div class="watercolor-blob blob-yellow"></div>
+                    <img src="assets/product_3.png" alt="Mustard Overalls" class="floating-product"
+                        style="animation-delay: 2s;">
+                    <span class="tag tag-sketch">Sale</span>
+                </div>
+                <div class="prod-info">
+                    <h4>Sunny Overalls</h4>
+                    <p class="price"><del>$60.00</del> $48.00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="torn-paper-footer">
+        <div class="paper-tear-top"></div>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3 class="logo-text">Antigrav Kids</h3>
+                <p class="handwritten-tag" style="color:#fff; font-size:1.8rem; transform:none;">A blend of reality &
+                    imagination.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Shop</h4>
+                <ul>
+                    <li><a href="#">New Drops</a></li>
+                    <li><a href="#">Collections</a></li>
+                    <li><a href="#">Sale items</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Join the story</h4>
+                <div class="social-icons">
+                    <a href="#" class="social-btn sketch-btn">Ig</a>
+                    <a href="#" class="social-btn sketch-btn">Fb</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Antigrav Kids. Designed with illustrations.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

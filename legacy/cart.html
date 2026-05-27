@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | Antigrav Kids</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;800;900&family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .cart-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; margin-top: 2rem; }
+        @media (max-width: 900px) { .cart-layout { grid-template-columns: 1fr; } }
+        
+        .cart-list { background: #fff; border: 3px solid var(--clr-blue); border-radius: 20px; box-shadow: 8px 8px 0 var(--clr-orange); padding: 1rem 2rem; }
+        .cart-item { display: flex; align-items: center; gap: 2rem; padding: 2rem 0; border-bottom: 2px dashed var(--clr-sky); position: relative;}
+        .cart-item:last-child { border-bottom: none; }
+        
+        .cart-thumb { width: 140px; height: 140px; border-radius: 12px; background: #fafafa; border: 2px solid #eee; display: flex; align-items:center; justify-content:center; overflow:hidden;}
+        .cart-thumb.multiply img { max-width: 90%; max-height: 90%; object-fit: contain; mix-blend-mode: multiply; }
+        .cart-thumb.real-photo img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .cart-details { flex: 1; min-width: 0; padding-right: 1rem; }
+        .cart-details h4 { font-family: var(--font-heading); font-size: 1.6rem; color: var(--clr-blue); margin-bottom: 0.5rem; word-wrap: break-word; }
+        .cart-details .price { font-size: 1.4rem; color: var(--clr-orange); font-weight: 800; }
+        
+        .qty-box { display: inline-flex; align-items: center; border: 2px solid var(--clr-blue); border-radius: 25px; overflow: hidden; margin-top: 1rem; }
+        .qty-btn { background: transparent; border: none; padding: 0.5rem 1.2rem; cursor: pointer; color: var(--clr-blue); font-weight: 800; font-family: var(--font-heading); font-size: 1.2rem; transition: background 0.2s; }
+        .qty-btn:hover { background: var(--clr-sky); }
+        .qty-val { padding: 0 1rem; font-weight: 800; color: var(--clr-blue); font-size: 1.2rem; }
+        
+        .del-btn { align-self: flex-start; margin-top: 0.5rem; background: transparent; border: none; color: #ff4b4b; font-family: var(--font-hand); font-size: 1.5rem; cursor: pointer; text-decoration: underline; white-space: nowrap; }
+        
+        .summary-card { position: sticky; top: 120px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 1rem; font-family: var(--font-heading); font-size: 1.2rem; color: var(--clr-blue); font-weight: 600; }
+        .summary-total { font-size: 1.8rem; font-weight: 900; border-top: 3px solid var(--clr-orange); padding-top: 1.5rem; margin-top: 1.5rem; }
+        
+        .promo-box { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+        .promo-box input { flex:1; padding: 0.8rem 1rem; border: 2px solid var(--clr-blue); border-radius: 30px; font-family: var(--font-heading); font-size:1rem; outline: none; }
+        .promo-box input:focus { border-color: var(--clr-orange); }
+        .promo-btn { padding: 0.8rem 1.5rem; background: var(--clr-blue); color: white; border: none; border-radius: 30px; font-family: var(--font-heading); font-weight: 800; cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .cart-item { flex-direction: column; text-align: center; gap: 1rem; padding: 2rem 1rem;}
+            .cart-details { padding-right: 0; min-width: 100%; display: flex; flex-direction: column; align-items: center; }
+            .cart-thumb { width: 100%; height: 220px; }
+            .del-btn { align-self: center; margin-top: 1.5rem; margin-left: 0; }
+            .cart-list { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="paper-texture"></div>
+
+    <div class="bg-elements" aria-hidden="true">
+        <div class="shape shape-blob-2" style="background:var(--clr-sky); opacity:0.1; top: 20%; left: -10%;"></div>
+        <div class="doodle-bg" style="background-image: url('assets/illust_doodles.png'); opacity: 0.05; mix-blend-mode: multiply;"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="glass-header" style="position: sticky; top: 20px;">
+        <div class="logo">
+            <a href="index.html" class="logo-text">Antigrav Kids</a>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html#collections">Lookbook</a>
+            <a href="products.html">Shop</a>
+            <a href="index.html#about">Story</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="btn btn-pill btn-black cart-counter" style="background:var(--clr-orange); color:#fff; border-color:var(--clr-orange);" onclick="window.location.href='cart.html'">Cart (2)</button>
+        </div>
+    </header>
+
+    <!-- Cart Layout -->
+    <section class="cart-section" style="padding-top: 4rem; max-width: 1200px; margin: 0 auto;">
+        <h1 class="hero-title styled-type text-stroke" style="font-size:3.5rem; margin-bottom:1rem; text-align:center;">Your <span class="marker-highlight" style="-webkit-text-stroke:0;">Magical</span> Bag</h1>
+        
+        <div class="cart-layout">
+            
+            <!-- Items Column -->
+            <div class="cart-list">
+                <!-- Dynamically populated by JS via localStorage -->
+            </div>
+
+            <!-- Summary Column -->
+            <div style="position:relative;">
+                <div class="watercolor-blob blob-mint" style="position: absolute; top:-50px; right:-50px; opacity:0.3; z-index:0;"></div>
+                <div class="glass-card summary-card collage-border">
+                    <h3 class="styled-type" style="font-size: 2rem; margin-bottom: 2rem; color:var(--clr-blue);">Order Summary</h3>
+                    
+                    <div class="promo-box">
+                        <input type="text" placeholder="Magic word (Promo)">
+                        <button class="promo-btn">Apply</button>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="cart-subtotal">$100.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span style="color:var(--clr-orange);">Free ✨</span>
+                    </div>
+                    
+                    <div class="summary-row summary-total">
+                        <span>Total (USD)</span>
+                        <span id="cart-total" style="color:var(--clr-orange);">$100.00</span>
+                    </div>
+
+                    <button class="btn btn-pill btn-primary" style="width: 100%; margin-top: 2rem; font-size: 1.4rem; padding: 1.2rem 0; box-shadow: 6px 6px 0 var(--clr-blue);">Proceed to Checkout</button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="torn-paper-footer" style="margin-top: 8rem;">
+        <div class="paper-tear-top"></div>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3 class="logo-text" style="color:#fff;">Antigrav Kids</h3>
+                 <p class="handwritten-tag" style="color:#fff; font-size:1.8rem; transform:none;">A blend of reality & imagination.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Shop</h4>
+                <ul>
+                    <li><a href="products.html">New Drops</a></li>
+                    <li><a href="products.html">Collections</a></li>
+                    <li><a href="products.html">Sale items</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Antigrav Kids. Designed with illustrations.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartItemsContainer = document.querySelector('.cart-list');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const totalEl = document.getElementById('cart-total');
+
+            function renderCart() {
+                let cart = JSON.parse(localStorage.getItem('antigrav_cart')) || [];
+                let subtotal = 0;
+                let htmlOut = '';
+
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = '<h3 style="text-align:center; padding: 3rem; color:var(--clr-blue); font-family:var(--font-heading);">Your magical bag is empty!</h3>';
+                    if(subtotalEl) subtotalEl.innerText = '$0.00';
+                    if(totalEl) totalEl.innerText = '$0.00';
+                    return;
+                }
+
+                cart.forEach((item, index) => {
+                    const itemTotal = item.price * item.qty;
+                    subtotal += itemTotal;
+                    
+                    const thumbClass = item.isMultiply ? 'multiply' : 'real-photo';
+
+                    htmlOut += `
+                    <div class="cart-item" data-index="${index}">
+                        <div class="cart-thumb ${thumbClass}">
+                            <img src="${item.image}" alt="${item.title}" onerror="this.style.display='none';">
+                        </div>
+                        <div class="cart-details">
+                            <h4>${item.title}</h4>
+                            <p class="price">$${item.price.toFixed(2)}</p>
+                            <div class="qty-box">
+                                <button class="qty-btn qty-minus">-</button>
+                                <span class="qty-val">${item.qty}</span>
+                                <button class="qty-btn qty-plus">+</button>
+                            </div>
+                        </div>
+                        <button class="del-btn">Remove x</button>
+                    </div>
+                    `;
+                });
+                
+                cartItemsContainer.innerHTML = htmlOut;
+
+                const formatted = `$${subtotal.toFixed(2)}`;
+                if (subtotalEl) subtotalEl.innerText = formatted;
+                if (totalEl) totalEl.innerText = formatted;
+            }
+
+            renderCart();
+
+            const checkoutBtn = document.querySelector('.summary-card .btn-primary');
+            if(checkoutBtn) {
+                checkoutBtn.addEventListener('click', () => {
+                    let cart = JSON.parse(localStorage.getItem('antigrav_cart')) || [];
+                    if (cart.length === 0) {
+                        alert('Your bag is empty!');
+                        return;
+                    }
+                    
+                    let subtotal = cart.reduce((tot, item) => tot + (item.price * item.qty), 0);
+                    let orders = JSON.parse(localStorage.getItem('antigrav_orders')) || [];
+                    
+                    const newOrder = {
+                        id: 'ORD-' + Math.floor(Math.random() * 10000),
+                        date: new Date().toLocaleDateString(),
+                        total: subtotal,
+                        items: cart.length
+                    };
+                    
+                    orders.push(newOrder);
+                    localStorage.setItem('antigrav_orders', JSON.stringify(orders));
+                    localStorage.removeItem('antigrav_cart');
+                    
+                    alert(`Order ${newOrder.id} successfully processed for $${subtotal.toFixed(2)}!\n\nCheck the new Admin Dashboard to see your simulated revenue.`);
+                    renderCart();
+                    if(typeof updateCartBadges === 'function') updateCartBadges();
+                });
+            }
+
+            if (cartItemsContainer) {
+                cartItemsContainer.addEventListener('click', (e) => {
+                    const btn = e.target;
+                    let cart = JSON.parse(localStorage.getItem('antigrav_cart')) || [];
+                    const itemEl = btn.closest('.cart-item');
+                    if(!itemEl) return;
+                    
+                    const index = parseInt(itemEl.dataset.index);
+                    
+                    if (btn.classList.contains('del-btn')) {
+                        itemEl.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                        itemEl.style.opacity = '0';
+                        itemEl.style.transform = 'scale(0.95)';
+                        
+                        cart.splice(index, 1);
+                        localStorage.setItem('antigrav_cart', JSON.stringify(cart));
+                        
+                        setTimeout(() => {
+                            renderCart();
+                            if(typeof updateCartBadges === 'function') updateCartBadges(); // From script.js
+                        }, 300);
+                    }
+                    
+                    if (btn.classList.contains('qty-btn')) {
+                        if (btn.classList.contains('qty-plus') || btn.innerText.includes('+')) {
+                            cart[index].qty++;
+                        } else if ((btn.classList.contains('qty-minus') || btn.innerText.includes('-')) && cart[index].qty > 1) {
+                            cart[index].qty--;
+                        }
+                        
+                        localStorage.setItem('antigrav_cart', JSON.stringify(cart));
+                        renderCart();
+                        if(typeof updateCartBadges === 'function') updateCartBadges();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
