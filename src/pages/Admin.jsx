@@ -9,13 +9,15 @@ export default function Admin() {
         addProduct, removeProduct, updateProduct, 
         addCollection, removeCollection, updateCollection,
         updateSettings, addCategory, removeCategory,
-        removeMessage, updateOrderStatus, removeUser,
+        removeMessage, updateOrderStatus, updateOrderPaymentStatus, removeUser,
         homeSections, updateHomeSection, deleteHomeSection
     } = useShop();
 
-    const [activeTab, setActiveTab] = useState('dashboard');
+    const [activeTab, setActiveTabState] = useState(() => sessionStorage.getItem('adminActiveTab') || 'dashboard');
+    const setActiveTab = (tab) => { setActiveTabState(tab); sessionStorage.setItem('adminActiveTab', tab); };
     const [showProductForm, setShowProductForm] = useState(false);
-    const [isAuthorized, setIsAuthorized] = useState(false);
+    const [isAuthorized, setIsAuthorizedState] = useState(() => sessionStorage.getItem('adminAuthorized') === 'true');
+    const setIsAuthorized = (val) => { setIsAuthorizedState(val); if (val) sessionStorage.setItem('adminAuthorized', 'true'); else sessionStorage.removeItem('adminAuthorized'); };
     const [adminUsername, setAdminUsername] = useState('');
     const [adminPassword, setAdminPassword] = useState('');
     const [loginError, setLoginError] = useState('');
@@ -319,9 +321,9 @@ export default function Admin() {
 
     const styles = `
         .admin-layout { display: flex; min-height: 100vh; font-family: 'Outfit', sans-serif; background: #fff; position: relative; overflow-x: hidden; }
-        .admin-sidebar { width: 300px; background: var(--clr-blue); color: #fff; padding: 2rem 1.5rem; display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100; border-radius: 0 40px 40px 0; box-shadow: 10px 0 30px rgba(0,0,0,0.1); border-right: 8px solid var(--clr-orange); }
-        .admin-sidebar h2 { font-size: 2rem; font-weight: 900; margin-bottom: 2.5rem; color: #fff; text-shadow: 3px 3px 0 var(--clr-orange); }
-        .admin-sidebar button { background: none; border: none; color: rgba(255,255,255,0.7); text-align: left; font-size: 1.1rem; font-weight: 700; padding: 1rem; border-radius: 20px; transition: 0.3s; margin-bottom: 0.5rem; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 1rem; }
+        .admin-sidebar { width: 300px; background: var(--clr-blue); color: #fff; padding: 1.5rem 1.5rem; display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100; border-radius: 0 40px 40px 0; box-shadow: 10px 0 30px rgba(0,0,0,0.1); border-right: 8px solid var(--clr-orange); overflow-y: auto; }
+        .admin-sidebar h2 { font-size: 1.6rem; font-weight: 900; margin-bottom: 1.5rem; color: #fff; text-shadow: 3px 3px 0 var(--clr-orange); }
+        .admin-sidebar button { background: none; border: none; color: rgba(255,255,255,0.7); text-align: left; font-size: 1rem; font-weight: 700; padding: 0.8rem 1rem; border-radius: 20px; transition: 0.3s; margin-bottom: 0.3rem; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 1rem; }
         .admin-sidebar button:hover { background: rgba(255,255,255,0.1); color: var(--clr-sky); transform: translateX(10px); }
         .admin-sidebar button.active { background: var(--clr-sky); color: var(--clr-blue); box-shadow: 4px 4px 0 var(--clr-yellow); }
         
@@ -470,10 +472,13 @@ export default function Admin() {
                     <button className={activeTab === 'home-sections' ? 'active' : ''} onClick={() => setActiveTab('home-sections')}>🏠 <span>Home Sections</span></button>
                     <button className={activeTab === 'settings' ? 'active' : ''} onClick={() => setActiveTab('settings')}>⚙️ <span>Site Settings</span></button>
                 </nav>
-                <div style={{ marginTop: 'auto' }}>
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     <Link to="/" style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(0,0,0,0.2)', padding: '1rem', borderRadius: '15px' }}>
                         🏰 View Website
                     </Link>
+                    <button onClick={() => { setIsAuthorized(false); sessionStorage.removeItem('adminActiveTab'); }} style={{ color: '#fff', fontSize: '1rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,75,75,0.3)', padding: '1rem', borderRadius: '15px', border: 'none', cursor: 'pointer', width: '100%' }}>
+                        🚪 <span>Logout</span>
+                    </button>
                 </div>
             </aside>
 
@@ -769,16 +774,29 @@ export default function Admin() {
                                             <p><strong>Total Items:</strong> {selectedOrder.items}</p>
                                             <p><strong>Payment Method:</strong> {selectedOrder.paymentMethod} ({selectedOrder.paymentStatus})</p>
                                         </div>
-                                        <div className="form-group" style={{ marginTop: '2rem' }}>
-                                            <label className="form-label">Update Order Status</label>
-                                            <select className="form-input" value={selectedOrder.status} onChange={(e) => {
-                                                updateOrderStatus(selectedOrder.id, e.target.value);
-                                                setSelectedOrder({...selectedOrder, status: e.target.value});
-                                            }}>
-                                                <option value="Paid">Payment Received</option>
-                                                <option value="Shipped">Dispatched 🚀</option>
-                                                <option value="Delivered">Delivered 🏰</option>
-                                            </select>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '2rem' }}>
+                                            <div className="form-group">
+                                                <label className="form-label">Order Status</label>
+                                                <select className="form-input" value={selectedOrder.status} onChange={(e) => {
+                                                    updateOrderStatus(selectedOrder.id, e.target.value);
+                                                    setSelectedOrder({...selectedOrder, status: e.target.value});
+                                                }}>
+                                                    <option value="Confirmed">Confirmed ✅</option>
+                                                    <option value="Shipped">Dispatched 🚀</option>
+                                                    <option value="Delivered">Delivered 🏰</option>
+                                                </select>
+                                            </div>
+                                            <div className="form-group">
+                                                <label className="form-label">Payment Status</label>
+                                                <select className="form-input" value={selectedOrder.paymentStatus || 'Pending'} onChange={(e) => {
+                                                    updateOrderPaymentStatus(selectedOrder.id, e.target.value);
+                                                    setSelectedOrder({...selectedOrder, paymentStatus: e.target.value});
+                                                }} style={{ borderColor: selectedOrder.paymentStatus === 'Paid' ? 'var(--clr-mint)' : selectedOrder.paymentStatus === 'Refunded' ? '#ef4444' : 'var(--clr-orange)' }}>
+                                                    <option value="Pending">Pending ⏳</option>
+                                                    <option value="Paid">Paid 💰</option>
+                                                    <option value="Refunded">Refunded 🔄</option>
+                                                </select>
+                                            </div>
                                         </div>
                                         <button className="btn btn-danger" style={{ width: '100%', marginTop: '2rem' }} onClick={() => setSelectedOrder(null)}>Close</button>
                                     </div>

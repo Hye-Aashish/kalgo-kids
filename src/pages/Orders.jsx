@@ -57,11 +57,11 @@ export default function Orders() {
                                         <p style={{ fontWeight: 800, marginTop: '0.5rem' }}>{order.items} Items • {settings.currency}{order.total.toFixed(2)}</p>
                                     </div>
                                     <div style={{ textAlign: 'right' }}>
-                                        <span className={`badge ${order.status === 'Paid' ? 'badge-success' : order.status === 'Shipped' ? 'badge-warning' : 'badge-success'}`} style={{ fontSize: '1rem', padding: '0.8rem 1.5rem' }}>
+                                        <span className={`badge ${order.status === 'Delivered' ? 'badge-success' : order.status === 'Shipped' ? 'badge-warning' : 'badge-info'}`} style={{ fontSize: '1rem', padding: '0.8rem 1.5rem' }}>
                                             {order.status}
                                         </span>
                                         <p className="handwritten-style" style={{ marginTop: '0.5rem', fontSize: '1.1rem' }}>
-                                            {order.status === 'Paid' ? 'Processing...' : order.status === 'Shipped' ? 'In Transit! 🚀' : 'Delivered! 🏰'}
+                                            {order.status === 'Delivered' ? 'Delivered! 🏰' : order.status === 'Shipped' ? 'In Transit! 🚀' : order.status === 'Confirmed' ? 'Order Confirmed! ✅' : 'Processing... ⏳'}
                                         </p>
                                     </div>
                                 </div>
@@ -77,6 +77,7 @@ export default function Orders() {
                 .orders-list { max-width: 900px; margin: 0 auto; }
                 .badge-success { color: var(--clr-mint); background: #f0fff4; border: 2px solid var(--clr-mint); }
                 .badge-warning { color: var(--clr-orange); background: #fffaf0; border: 2px solid var(--clr-orange); }
+                .badge-info { color: var(--clr-blue); background: #eff6ff; border: 2px solid var(--clr-blue); }
             `}</style>
         </>
     );

@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const { Settings } = require('./models');
+require('dotenv').config();
 
-const MONGO_URI = "mongodb://127.0.0.1:27017/kalgo_kids";
+const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/kalgo_kids";
 
 async function resetSettings() {
     try {

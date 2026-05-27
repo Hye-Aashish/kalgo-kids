@@ -21,7 +21,7 @@ const ProductSchema = new mongoose.Schema({
     status: { type: String, default: 'active' }, // active, draft, archived
     seoTitle: String,
     seoDescription: String,
-    handle: { type: String, unique: true }
+    handle: { type: String, unique: true, sparse: true }
 }, { timestamps: true });
 
 const CollectionSchema = new mongoose.Schema({

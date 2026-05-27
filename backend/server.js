@@ -48,19 +48,19 @@ mongoose.connect(MONGO_URI)
     const pCount = await Product.countDocuments();
     if (pCount === 0) {
         await Product.insertMany([
-            { title: "Well Done Bear Set", price: 45.00, image: "assets/well_done_set.jpg", isMultiply: false, category: "T-Shirts", collection: "Snow Days ❄️" },
-            { title: "Pink Flower Denim Set", price: 52.00, image: "assets/pink_flower_set.jpg", isMultiply: false, category: "Jeans", collection: "Summer Vibes ☀️" },
-            { title: "Geo Fun Sweater", price: 42.00, image: "assets/product_1.png", isMultiply: true, category: "Shirts", collection: "Summer Vibes ☀️" },
-            { title: "Rainbow Stompers", price: 55.00, image: "assets/product_2.png", isMultiply: true, category: "Shoes", collection: "Party Time 🎉" }
+            { title: "Well Done Bear Set", price: 45.00, image: "/assets/well_done_set.jpg", isMultiply: false, category: "T-Shirts", collection: "Snow Days ❄️" },
+            { title: "Pink Flower Denim Set", price: 52.00, image: "/assets/pink_flower_set.jpg", isMultiply: false, category: "Jeans", collection: "Summer Vibes ☀️" },
+            { title: "Geo Fun Sweater", price: 42.00, image: "/assets/product_1.png", isMultiply: true, category: "Shirts", collection: "Summer Vibes ☀️" },
+            { title: "Rainbow Stompers", price: 55.00, image: "/assets/product_2.png", isMultiply: true, category: "Shoes", collection: "Party Time 🎉" }
         ]);
         console.log('Seeded default products');
     }
     const cCount = await Collection.countDocuments();
     if (cCount === 0) {
         await Collection.insertMany([
-            { title: "Snow Days ❄️", image: "assets/winter.png", illust: "assets/illust_winter.png" },
-            { title: "Summer Vibes ☀️", image: "assets/summer.png", illust: "assets/illust_summer.png" },
-            { title: "Party Time 🎉", image: "assets/party.png", illust: "assets/illust_party.png" }
+            { title: "Snow Days ❄️", image: "/assets/winter.png", illust: "/assets/illust_winter.png" },
+            { title: "Summer Vibes ☀️", image: "/assets/summer.png", illust: "/assets/illust_summer.png" },
+            { title: "Party Time 🎉", image: "/assets/party.png", illust: "/assets/illust_party.png" }
         ]);
         console.log('Seeded default collections');
     }
@@ -172,7 +172,7 @@ app.get('/api/settings', async (req, res) => {
         { title: "Shop", type: "links", links: [{ label: "All Products", url: "/products" }] }
     ];
     if (sObj.brandLogo === undefined) sObj.brandLogo = "";
-    if (sObj.heroImage === undefined) sObj.heroImage = "assets/hero_kids.png";
+    if (sObj.heroImage === undefined) sObj.heroImage = "/assets/hero_kids.png";
     if (sObj.footerTagline === undefined) sObj.footerTagline = "A blend of reality & imagination.";
     if (sObj.footerCopyright === undefined) sObj.footerCopyright = "© 2026 KALGO Kids. Designed with illustrations.";
 

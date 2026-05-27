@@ -75,6 +75,14 @@ export const ShopProvider = ({ children }) => {
 
     // Initial Data Fetch with Fallback Logic
     useEffect(() => {
+        const fixImgUrl = (url) => {
+            if (!url) return url;
+            if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/')) {
+                return url;
+            }
+            return `/${url}`;
+        };
+
         const fetchData = async () => {
             try {
                 const [pRes, colRes, ordRes, setRes, catRes, msgRes, uRes, hRes] = await Promise.all([
@@ -88,11 +96,27 @@ export const ShopProvider = ({ children }) => {
                     axios.get(`${API_BASE}/home-sections`).catch(() => ({ data: [] }))
                 ]);
                 
-                if (pRes.data) setCatalog(pRes.data);
-                if (colRes.data) setCollections(colRes.data);
+                if (pRes.data) {
+                    const sanitized = pRes.data.map(p => ({
+                        ...p,
+                        image: fixImgUrl(p.image),
+                        images: Array.isArray(p.images) ? p.images.map(fixImgUrl) : []
+                    }));
+                    setCatalog(sanitized);
+                }
+                if (colRes.data) {
+                    const sanitized = colRes.data.map(c => ({
+                        ...c,
+                        image: fixImgUrl(c.image),
+                        illust: fixImgUrl(c.illust)
+                    }));
+                    setCollections(sanitized);
+                }
                 if (ordRes.data) setOrders(ordRes.data);
                 if (setRes.data) {
                     const mergedSettings = { ...settings, ...setRes.data };
+                    mergedSettings.heroImage = fixImgUrl(mergedSettings.heroImage);
+                    mergedSettings.brandLogo = fixImgUrl(mergedSettings.brandLogo);
                     // Extra safety: ensure footerSections is an array
                     if (!Array.isArray(mergedSettings.footerSections)) {
                         mergedSettings.footerSections = [];
@@ -130,29 +154,29 @@ export const ShopProvider = ({ children }) => {
     }, [user]);
 
     // --- Actions ---
-    const register = async (userData) => {
+    const register = async (name, email, password) => {
         try {
-            const res = await axios.post(`${API_BASE.replace('/api', '')}/api/register`, userData);
+            const res = await axios.post(`${API_BASE.replace('/api', '')}/api/register`, { name, email, password });
             setUser(res.data.user);
             showNotify('Registration successful! ✨', 'success');
             return res.data;
         } catch (err) {
-            const mockUser = { ...userData, _id: Date.now().toString() };
+            const mockUser = { name, email, password, _id: Date.now().toString() };
             setUser(mockUser);
             showNotify('User created locally! ✨', 'success');
             return { success: true, user: mockUser };
         }
     };
 
-    const login = async (credentials) => {
+    const login = async (email, password) => {
         try {
-            const res = await axios.post(`${API_BASE.replace('/api', '')}/api/login`, credentials);
+            const res = await axios.post(`${API_BASE.replace('/api', '')}/api/login`, { email, password });
             setUser(res.data.user);
             showNotify(`Welcome back, ${res.data.user.name.split(' ')[0]}! ✨`, 'success');
             return res.data;
         } catch (err) {
-            if (credentials.email && credentials.password) {
-                const mockUser = { name: 'Explorer', email: credentials.email, _id: 'mock-id' };
+            if (email && password) {
+                const mockUser = { name: 'Explorer', email, _id: 'mock-id' };
                 setUser(mockUser);
                 showNotify('Log in successful', 'success');
                 return { success: true, user: mockUser };
@@ -367,6 +391,17 @@ export const ShopProvider = ({ children }) => {
         }
     };
 
+    const updateOrderPaymentStatus = async (id, paymentStatus) => {
+        try {
+            const res = await axios.patch(`${API_BASE}/orders/${id}`, { paymentStatus });
+            setOrders(prev => prev.map(o => o.id === id ? res.data : o));
+            showNotify(`Payment status: ${paymentStatus}!`, 'success');
+        } catch (err) {
+            setOrders(prev => prev.map(o => o.id === id ? { ...o, paymentStatus } : o));
+            showNotify(`Payment status: ${paymentStatus}!`, 'success');
+        }
+    };
+
     const updateHomeSection = async (id, data) => {
         try {
             if (id) {
@@ -400,7 +435,7 @@ export const ShopProvider = ({ children }) => {
             addProduct, removeProduct, updateProduct,
             addCollection, removeCollection, updateCollection,
             updateSettings, addCategory, removeCategory,
-            addMessage, removeMessage, updateOrderStatus, removeUser,
+            addMessage, removeMessage, updateOrderStatus, updateOrderPaymentStatus, removeUser,
             updateHomeSection, deleteHomeSection
         }}>
             {notification && (

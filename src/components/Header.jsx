@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useShop } from '../context/ShopContext';
 
 export default function Header() {
-    const { cart, settings, user, logout } = useShop();
+    const { cart, settings, user } = useShop();
     const location = useLocation();
     
     const cartCount = cart.reduce((total, item) => total + item.qty, 0);
@@ -27,13 +27,10 @@ export default function Header() {
             </nav>
             <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                 {user ? (
-                    <div className="user-profile" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <Link to="/profile" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span className="handwritten-style" style={{ fontSize: '1.2rem', color: 'var(--clr-blue)' }}>Hi, {user.name.split(' ')[0]}!</span>
-                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--clr-orange)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontWeight: 900 }}>{user.name.charAt(0).toUpperCase()}</div>
-                        </Link>
-                        <button onClick={logout} className="btn-scribble" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.5rem' }} title="Logout">🚪</button>
-                    </div>
+                    <Link to="/profile" className="user-profile" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+                        <span className="handwritten-style" style={{ fontSize: '1.2rem', color: 'var(--clr-blue)' }}>Hi, {user.name.split(' ')[0]}!</span>
+                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--clr-orange)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontWeight: 900 }}>{user.name.charAt(0).toUpperCase()}</div>
+                    </Link>
                 ) : (
                     <Link to="/login" style={{ textDecoration: 'none' }}>
                         <button className="btn btn-pill btn-white" style={{ border: '2px solid var(--clr-blue)' }}>Login</button>
